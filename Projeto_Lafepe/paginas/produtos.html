@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produtos</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .produtos-container {
+      width: 100%;
+      max-width: 800px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-top: 100px;
+    }
+    .produtos-container h2 {
+      margin-bottom: 20px;
+      color: #333;
+      text-align: center;
+    }
+    .produtos-lista {
+      list-style-type: none;
+      padding: 0;
+    }
+    .produtos-lista li {
+      margin: 10px 0;
+      padding: 10px;
+      background: #e9ecef;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      cursor: pointer;
+    }
+    .produtos-lista li:hover {
+      background: #d8dee3;
+    }
+    .back-button {
+      display: block;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #ff0000;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      text-align: center;
+    }
+    .back-button:hover {
+      background-color: #cc0000;
+    }
+  </style>
+</head>
+<body>
+  <div class="produtos-container">
+    <h2>Produtos</h2>
+    <ul class="produtos-lista">
+      <li data-name="20086">20086</li>
+      <li data-name="20085">20085</li>
+      <li data-name="20090">20090</li>
+      <li data-name="20091">20091</li>
+      <li data-name="20087">20087</li>
+      <li data-name="20088">20088</li>
+      <li data-name="20100">20100</li>
+      <li data-name="21138">21138</li>
+      <li data-name="21153">21153</li>
+      <li data-name="20101">20101</li>
+      <li data-name="20078">20078</li>
+      <li data-name="02325">02325</li>
+    </ul>
+    <a href="estoque.html" class="back-button" target="contentFrame">Voltar</a>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const listaProdutos = document.querySelectorAll('.produtos-lista li');
+
+      listaProdutos.forEach(item => {
+        item.addEventListener('click', () => {
+          const productName = item.getAttribute('data-name');
+          window.location.href = `produto_detalhes.html?name=${productName}`;
+        });
+      });
+    });
+  </script>
+</body>
+</html>

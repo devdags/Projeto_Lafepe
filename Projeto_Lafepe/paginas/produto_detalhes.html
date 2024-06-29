@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalhes do Produto</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .produto-detalhes-container {
+      width: 90%;
+      max-width: 800px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      overflow-x: auto;
+      margin-top: 1500px;
+    }
+    .produto-detalhes-container h2 {
+      margin-bottom: 20px;
+      color: #333;
+      text-align: center;
+      font-size: 1.8em;
+      border-bottom: 2px solid #e0e0e0;
+      padding-bottom: 10px;
+    }
+    .produto-detalhes-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    .produto-detalhes-table th, .produto-detalhes-table td {
+      padding: 15px;
+      border: 1px solid #e0e0e0;
+      text-align: left;
+      font-size: 1em;
+    }
+    .produto-detalhes-table th {
+      background-color: #007bff;
+      color: #fff;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+    .produto-detalhes-table tbody tr {
+      transition: background-color 0.3s;
+    }
+    .produto-detalhes-table tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    .produto-detalhes-table tbody tr:hover {
+      background-color: #f1f1f1;
+    }
+    .back-button {
+      display: block;
+      margin: 20px auto 0;
+      padding: 12px 20px;
+      background-color: #007bff;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      text-align: center;
+      font-size: 1em;
+      transition: background-color 0.3s;
+    }
+    .back-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="produto-detalhes-container">
+    <h2>Detalhes do Produto</h2>
+    <table class="produto-detalhes-table">
+      <thead>
+        <tr>
+          <th>Nome do Produto</th>
+          <th>ID</th>
+          <th>Data de Fabricação</th>
+          <th>Data de Validade</th>
+          <th>Quantidade Total em Estoque</th>
+          <th>Valor Total (R$)</th>
+        </tr>
+      </thead>
+      <tbody id="produto-detalhes">
+      </tbody>
+    </table>
+    <a href="produtos.html" class="back-button" target="contentFrame">Voltar</a>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const productName = urlParams.get('name');
+      const produtoDetalhes = document.getElementById('produto-detalhes');
+      fetch(`http://localhost:3000/produto/${productName}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.message) {
+            produtoDetalhes.innerHTML = `
+              <tr>
+                <td colspan="6">${data.message}</td>
+              </tr>
+            `;
+          } else {
+            produtoDetalhes.innerHTML = data.map(produto => `
+              <tr>
+                <td>${produto.nome}</td>
+                <td>${produto.produto_id}</td>
+                <td>${new Date(produto.fabricacao).toLocaleDateString()}</td>
+                <td>${new Date(produto.validade).toLocaleDateString()}</td>
+                <td>${produto.quantidade}</td>
+                <td>${parseFloat(produto.valor).toFixed(2)}</td>
+              </tr>
+            `).join('');
+          }
+        })
+        .catch(error => {
+          console.error('Erro ao buscar os detalhes do produto:', error);
+          produtoDetalhes.innerHTML = `
+            <tr>
+              <td colspan="6">Erro ao buscar os detalhes do produto</td>
+            </tr>
+          `;
+        });
+    });
+  </script>
+</body>
+</html>

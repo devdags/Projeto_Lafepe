@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matéria-prima</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .materia-prima-container {
+      width: 100%;
+      max-width: 800px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-top: 1380px;
+    }
+    .materia-prima-container h2 {
+      margin-bottom: 20px;
+      color: #333;
+      text-align: center;
+    }
+    .materia-prima-lista {
+      list-style-type: none;
+      padding: 0;
+  
+    }
+    .materia-prima-lista li {
+      margin: 10px 0;
+      padding: 10px;
+      background: #e9ecef;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      cursor: pointer;
+    }
+    .materia-prima-lista li:hover {
+      background: #d8dee3;
+    }
+    .back-button {
+      display: block;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #ff0000;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      text-align: center;
+    }
+    .back-button:hover {
+      background-color: #cc0000;
+    }
+  </style>
+</head>
+<body>
+  <div class="materia-prima-container">
+    <h2>Matéria-prima</h2>
+    <ul class="materia-prima-lista">
+      <li data-name="02254">02254</li>
+      <li data-name="02261">02261</li>
+      <li data-name="02298">02298</li>
+      <li data-name="02301">02301</li>
+      <li data-name="02307">02307</li>
+      <li data-name="02314">02314</li>
+      <li data-name="02325">02325</li>
+      <li data-name="02391">02391</li>
+      <li data-name="02392">02392</li>
+      <li data-name="02013">02013</li>
+      <li data-name="02016">02016</li>
+      <li data-name="02020">02020</li>
+      <li data-name="02022">02022</li>
+      <li data-name="02058">02058</li>
+      <li data-name="02068">02068</li>
+      <li data-name="02074">02074</li>
+      <li data-name="02108">02108</li>
+      <li data-name="02119">02119</li>
+      <li data-name="02188">02188</li>
+      <li data-name="02232">02232</li>
+      <li data-name="02242">02242</li>
+      <li data-name="02266">02266</li>
+      <li data-name="02297">02297</li>
+      <li data-name="02302">02302</li>
+      <li data-name="02303">02303</li>
+      <li data-name="02304">02304</li>
+      <li data-name="02305">02305</li>
+      <li data-name="02306">02306</li>
+      <li data-name="02309">02309</li>
+      <li data-name="02311">02311</li>
+      <li data-name="02315">02315</li>
+      <li data-name="02326">02326</li>
+      <li data-name="02330">02330</li>
+      <li data-name="02332">02332</li>
+      <li data-name="02333">02333</li>
+      <li data-name="02377">02377</li>
+      <li data-name="02378">02378</li>
+      <li data-name="02399">02399</li>
+      <li data-name="02400">02400</li>
+    </ul>
+    <a href="estoque.html" class="back-button" target="contentFrame">Voltar</a>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const listaMateriaPrima = document.querySelectorAll('.materia-prima-lista li');
+
+      listaMateriaPrima.forEach(item => {
+        item.addEventListener('click', () => {
+          const materiaPrimaName = item.getAttribute('data-name');
+          window.location.href = `materia_prima_detalhes.html?name=${materiaPrimaName}`;
+        });
+      });
+    });
+  </script>
+</body>
+</html>

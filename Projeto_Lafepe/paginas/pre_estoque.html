@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pré-Estoque</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .pre-estoque-container {
+      width: 100%;
+      max-width: 1100px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      box-sizing: border-box;
+      margin-top: 5800px;
+    }
+    .pre-estoque-container h2 {
+      margin-bottom: 20px;
+      color: #333;
+      text-align: center;
+      font-size: 1.8rem;
+    }
+    .pre-estoque-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    .pre-estoque-table th, .pre-estoque-table td {
+      padding: 15px;
+      border: 1px solid #e0e0e0;
+      text-align: left;
+      font-size: 1em;
+    }
+    .pre-estoque-table th {
+      background-color: #007bff;
+      color: #fff;
+    }
+    .pre-estoque-table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    .pre-estoque-table tr:hover {
+      background-color: #f1f1f1;
+    }
+    .back-button {
+      display: block;
+      width: 150px;
+      margin: 0 auto;
+      padding: 10px;
+      background-color: #ff0000;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      text-align: center;
+      transition: background-color 0.3s;
+    }
+    .back-button:hover {
+      background-color: #cc0000;
+    }
+  </style>
+</head>
+<body>
+  <div class="pre-estoque-container">
+    <h2>Pré-Estoque</h2>
+    <table class="pre-estoque-table">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>ID do Produto</th>
+          <th>Data de Aquisição</th>
+          <th>Data de Fabricação</th>
+          <th>Data de Validade</th>
+          <th>Data de Chegada</th>
+          <th>Quantidade</th>
+          <th>Valor Total (R$)</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="preEstoqueTableBody">
+      </tbody>
+    </table>
+    <a href="aquisicoes.html" class="back-button" target="contentFrame">Voltar</a>
+  </div>
+  <script>
+    fetch('/pre_estoque')
+    .then(response => response.json())
+    .then(data => {
+      const tableBody = document.getElementById('preEstoqueTableBody');
+      tableBody.innerHTML = '';
+      data.forEach(item => {
+        const formatDate = dateStr => new Date(dateStr).toLocaleDateString('pt-BR');
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${item.nome}</td>
+          <td>${item.produto_id}</td>
+          <td>${formatDate(item.data_aquisicao)}</td>
+          <td>${formatDate(item.data_fabricacao)}</td>
+          <td>${formatDate(item.data_validade)}</td>
+          <td>${formatDate(item.data_chegada)}</td>
+          <td>${item.quantidade}</td>
+          <td>${item.valor_total}</td>
+          <td><button onclick="moverParaQuarentena(${item.id}, '${item.nome}')">Mover para quarentena</button></td>
+        `;
+        tableBody.appendChild(row);
+      });
+    });
+    function moverParaQuarentena(id, nome) {
+      fetch(`/mover_para_quarentena?id=${id}&nome=${nome}`, {
+        method: 'POST',
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('Item movido para quarentena com sucesso.');
+          location.reload();
+        } else {
+          alert('Erro ao mover item para quarentena: ' + data.message);
+        }
+      });
+    }
+  </script>
+</body>
+</html>

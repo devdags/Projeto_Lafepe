@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalhes da Matéria-prima</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f8f9fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .materia-prima-detalhes-container {
+      width: 100%;
+      max-width: 800px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      animation: fadeIn 1s ease-in-out;
+      margin-top: 1400px;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .materia-prima-detalhes-container h2 {
+      margin-bottom: 20px;
+      color: #333;
+      text-align: center;
+      border-bottom: 2px solid #e9ecef;
+      padding-bottom: 10px;
+    }
+    .materia-prima-detalhes-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    .materia-prima-detalhes-table th, .materia-prima-detalhes-table td {
+      padding: 15px;
+      border: 1px solid #e0e0e0;
+      text-align: left;
+      font-size: 1em;
+    }
+    .materia-prima-detalhes-table th {
+      background-color: #007bff;
+      color: #fff;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+    .materia-prima-detalhes-table tbody tr {
+      transition: background-color 0.3s;
+    }
+    .materia-prima-detalhes-table tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    .materia-prima-detalhes-table tbody tr:hover {
+      background-color: #f1f1f1;
+    }
+    .back-button {
+      display: block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      text-decoration: none;
+      text-align: center;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+    .back-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="materia-prima-detalhes-container">
+    <h2>Detalhes da Matéria-prima</h2>
+    <table class="materia-prima-detalhes-table">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>ID do Produto</th>
+          <th>Data de Aquisição</th>
+          <th>Data de Fabricação</th>
+          <th>Data de Validade</th>
+          <th>Quantidade em Estoque</th>
+          <th>Valor Total (R$)</th>
+        </tr>
+      </thead>
+      <tbody id="materia-prima-detalhes">
+      </tbody>
+    </table>
+    <a href="materia_prima.html" class="back-button" target="contentFrame">Voltar</a>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const materiaPrimaName = urlParams.get('name');
+      const materiaPrimaDetalhes = document.getElementById('materia-prima-detalhes');
+
+      fetch(`/materia_prima/${materiaPrimaName}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erro ao buscar os detalhes da matéria-prima');
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (data.message) {
+            materiaPrimaDetalhes.innerHTML = `
+              <tr>
+                <td colspan="7">${data.message}</td>
+              </tr>
+            `;
+          } else {
+            const formatDate = (dateStr) => {
+              const date = new Date(dateStr);
+              const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+              return date.toLocaleDateString(undefined, options);
+            };
+            materiaPrimaDetalhes.innerHTML = data.map(mp => `
+              <tr>
+                <td>${mp.nome}</td>
+                <td>${mp.produto_id}</td>
+                <td>${formatDate(mp.aquisicao)}</td>
+                <td>${formatDate(mp.fabricacao)}</td>
+                <td>${formatDate(mp.validade)}</td>
+                <td>${mp.quantidade}</td>
+                <td>${Number(mp.valor).toFixed(2)}</td>
+              </tr>
+            `).join('');
+          }
+        })
+        .catch(error => {
+          console.error('Erro ao buscar os detalhes da matéria-prima:', error);
+          materiaPrimaDetalhes.innerHTML = `
+            <tr>
+              <td colspan="7">Erro ao buscar os detalhes da matéria-prima</td>
+            </tr>
+          `;
+        });
+    });
+  </script>
+</body>
+</html>

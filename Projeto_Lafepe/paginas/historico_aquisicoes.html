@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Histórico de Aquisições</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .historico-container {
+      width: 100%;
+      max-width: 1200px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-top: 2700px;
+    }
+    .historico-container h2 {
+      margin-bottom: 20px;
+      color: #333;
+      text-align: center;
+    }
+    .historico-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    .historico-table th, .historico-table td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    .historico-table th {
+      background-color: #f4f4f4;
+    }
+    .historico-table tbody tr:hover {
+      background-color: #f9f9f9;
+    }
+    .back-button {
+      display: block;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #ff0000;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      text-align: center;
+    }
+    .back-button:hover {
+      background-color: #cc0000;
+    }
+  </style>
+</head>
+<body>
+  <div class="historico-container">
+    <h2>Histórico de Aquisições</h2>
+    <table class="historico-table">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Produto ID</th>
+          <th>Data de Aquisição</th>
+          <th>Data de Fabricação</th>
+          <th>Data de Validade</th>
+          <th>Data de Chegada na Unidade</th>
+          <th>Valor Total (R$)</th>
+          <th>Data de Entrada na Quarentena</th>
+          <th>Data de Saída da Quarentena</th>
+          <th>Dias</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="historicoList">
+      </tbody>
+    </table>
+    <a href="aquisicoes.html" class="back-button" target="contentFrame">Voltar</a>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      fetch('/historico_aquisicoes')
+        .then(response => response.json())
+        .then(data => {
+          const historicoList = document.getElementById('historicoList');
+
+          data.forEach(item => {
+            const row = document.createElement('tr');
+            const dataEntrada = new Date(item.data_entrada);
+            const dataSaida = new Date(item.data_saida);
+            const diffTime = Math.abs(dataSaida - dataEntrada);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            row.innerHTML = `
+              <td>${item.nome}</td>
+              <td>${item.produto_id}</td>
+              <td>${new Date(item.data_aquisicao).toLocaleDateString('pt-BR')}</td>
+              <td>${new Date(item.data_fabricacao).toLocaleDateString('pt-BR')}</td>
+              <td>${new Date(item.data_validade).toLocaleDateString('pt-BR')}</td>
+              <td>${new Date(item.data_chegada).toLocaleDateString('pt-BR')}</td>
+              <td>${item.valor_total}</td>
+              <td>${new Date(item.data_entrada).toLocaleDateString('pt-BR')}</td>
+              <td>${new Date(item.data_saida).toLocaleDateString('pt-BR')}</td>
+              <td>${diffDays}</td>
+              <td>${item.status}</td>
+            `;
+            historicoList.appendChild(row);
+          });
+        })
+        .catch(error => {
+          console.error('Erro ao carregar dados do histórico:', error);
+        });
+    });
+  </script>
+</body>
+</html>

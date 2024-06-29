@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nova Aquisição</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .nova-aquisicao-container {
+      width: 100%;
+      max-width: 600px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+    .nova-aquisicao-container h2 {
+      margin-bottom: 20px;
+      color: #333;
+      text-align: center;
+    }
+    .nova-aquisicao-form label {
+      display: block;
+      margin-bottom: 5px;
+      color: #555;
+    }
+    .nova-aquisicao-form input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .nova-aquisicao-form button {
+      width: 100%;
+      padding: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .nova-aquisicao-form button:hover {
+      background-color: #0056b3;
+    }
+    .back-button {
+      display: block;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #ff0000;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      text-align: center;
+    }
+    .back-button:hover {
+      background-color: #cc0000;
+    }
+  </style>
+</head>
+<body>
+  <div class="nova-aquisicao-container">
+    <h2>Nova Aquisição</h2>
+    <form class="nova-aquisicao-form" id="novaAquisicaoForm">
+      <label for="nome">Nome</label>
+      <input type="text" id="nome" name="nome">
+      
+      <label for="produto_id">ID do Produto</label>
+      <input type="text" id="produto_id" name="produto_id" maxlength="10">
+      
+      <label for="data-aquisicao">Data de Aquisição</label>
+      <input type="date" id="data-aquisicao" name="data-aquisicao">
+      
+      <label for="data-fabricacao">Data de Fabricação</label>
+      <input type="date" id="data-fabricacao" name="data-fabricacao">
+      
+      <label for="data-validade">Data de Validade</label>
+      <input type="date" id="data-validade" name="data-validade">
+      
+      <label for="data-chegada">Data de Chegada na Unidade</label>
+      <input type="date" id="data-chegada" name="data-chegada">
+      
+      <label for="quantidade">Quantidade</label>
+      <input type="number" id="quantidade" name="quantidade" min="0">
+      
+      <label for="valor-total">Valor Total (R$)</label>
+      <input type="number" id="valor-total" name="valor-total" step="0.01" min="0">
+      
+      <button type="submit">Salvar e Enviar para Pré Estoque</button>
+    </form>
+    <a href="aquisicoes.html" class="back-button" target="contentFrame">Voltar</a>
+  </div>
+
+  <script>
+    document.getElementById('novaAquisicaoForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      
+      const validNames = [
+        '02254', '02261', '02298', '02301', '02307', '02314', '02325', '02391', '02392', '02013', 
+        '02016', '02020', '02022', '02058', '02068', '02074', '02108', '02119', '02188', '02232', 
+        '02242', '02266', '02297', '02302', '02303', '02304', '02305', '02306', '02309', '02311', 
+        '02315', '02326', '02330', '02332', '02333', '02377', '02378', '02399', '02400', '11816', 
+        '11818', '11842', '11813', '11843', '11876', '11877', '11888', '11886', '11887', '11885', 
+        '11875', '11819', '11906', '11904', '11909', '11958', '11959', '11396', '11795', '11796', 
+        '11797', '11808', '11922', '11580', '11845', '11856', '11921', '11854', '11844', '11853', 
+        '11869', '11872', '11895', '11870', '11894', '11867', '11873', '11897', '11868', '11893', 
+        '11871', '11892', '11744', '11747', '11940', '11951', '11908', '11937', '11938', '11939', 
+        '11687', '11911', '11912', '11913', '11910'
+      ];
+      
+      const nome = document.getElementById('nome').value;
+      const produto_id = document.getElementById('produto_id').value;
+      const data_aquisicao = document.getElementById('data-aquisicao').value;
+      const data_fabricacao = document.getElementById('data-fabricacao').value;
+      const data_validade = document.getElementById('data-validade').value;
+      const data_chegada = document.getElementById('data-chegada').value;
+      const quantidade = document.getElementById('quantidade').value;
+      const valor_total = document.getElementById('valor-total').value;
+      
+      if (!validNames.includes(nome)) {
+        alert('Nome inválido.');
+        return;
+      }
+      fetch('/nova_aquisicao', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          nome,
+          produto_id,
+          data_aquisicao,
+          data_fabricacao,
+          data_validade,
+          data_chegada,
+          quantidade,
+          valor_total
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('Aquisição salva com sucesso!');
+          document.getElementById('novaAquisicaoForm').reset();
+        } else {
+          alert('Erro ao salvar os dados: ' + data.message);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

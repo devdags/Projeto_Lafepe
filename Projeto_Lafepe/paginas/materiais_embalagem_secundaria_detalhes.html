@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalhes da Embalagem Secundária</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .detalhes-container {
+      width: 100%;
+      max-width: 800px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-top: 1400px;
+    }
+    .detalhes-container h2 {
+      margin-bottom: 20px;
+      color: #333;
+      text-align: center;
+    }
+    .detalhes-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    .detalhes-table th, .detalhes-table td {
+      padding: 15px;
+      border: 1px solid #e0e0e0;
+      text-align: left;
+      font-size: 1em;
+    }
+    .detalhes-table th {
+      background-color: #007bff;
+      color: #fff;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+    .detalhes-table tbody tr:hover {
+      background-color: #f1f1f1;
+    }
+    .back-button {
+      display: block;
+      margin: 20px auto 0;
+      padding: 12px 20px;
+      background-color: #007bff;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      text-align: center;
+      font-size: 1em;
+      transition: background-color 0.3s;
+    }
+    .back-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="detalhes-container">
+    <h2>Detalhes da Embalagem Secundária</h2>
+    <table class="detalhes-table">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>ID do Produto</th>
+          <th>Data de Aquisição</th>
+          <th>Data de Fabricação</th>
+          <th>Data de Validade</th>
+          <th>Quantidade em Estoque</th>
+          <th>Valor Total (R$)</th>
+        </tr>
+      </thead>
+      <tbody id="detalhes">
+      </tbody>
+    </table>
+    <a href="materiais_embalagem_secundaria.html" class="back-button" target="contentFrame">Voltar</a>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const itemName = urlParams.get('name');
+      const detalhes = document.getElementById('detalhes');
+
+      fetch(`/material_embalagem_secundaria/${itemName}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erro ao buscar os detalhes do material');
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (data.message) {
+            detalhes.innerHTML = `
+              <tr>
+                <td colspan="7">${data.message}</td>
+              </tr>
+            `;
+          } else {
+            const formatDate = (dateStr) => {
+              const date = new Date(dateStr);
+              const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+              return date.toLocaleDateString(undefined, options);
+            };
+
+            detalhes.innerHTML = data.map(material => `
+              <tr>
+                <td>${material.nome}</td>
+                <td>${material.produto_id}</td>
+                <td>${formatDate(material.aquisicao)}</td>
+                <td>${formatDate(material.fabricacao)}</td>
+                <td>${formatDate(material.validade)}</td>
+                <td>${material.quantidade}</td>
+                <td>${Number(material.valor).toFixed(2)}</td>
+              </tr>
+            `).join('');
+          }
+        })
+        .catch(error => {
+          console.error('Erro ao buscar os detalhes do material:', error);
+          detalhes.innerHTML = `
+            <tr>
+              <td colspan="7">Erro ao buscar os detalhes do material</td>
+            </tr>
+          `;
+        });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .menu-container {
+      display: flex;
+      height: 100vh;
+    }
+    .menu {
+      width: 20%;
+      background: #fff;
+      padding: 10px;
+      border-right: 1px solid #ccc;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    }
+    .menu ul {
+      list-style: none;
+      padding: 0;
+    }
+    .menu ul li {
+      margin: 10px 0;
+    }
+    .menu ul li a {
+      text-decoration: none;
+      color: #ffffff;
+      padding: 10px;
+      display: block;
+      border-radius: 5px;
+      background: #007bff;
+      transition: background 0.3s;
+    }
+    .menu ul li a:hover {
+      background: #466485;
+      color: #fff;
+    }
+    .content {
+      flex-grow: 1;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="menu-container">
+    <div class="menu">
+      <ul>
+        <li><a href="estoque.html" target="contentFrame">Estoque</a></li>
+        <li><a href="aquisicoes.html" target="contentFrame">Aquisições</a></li>
+        <li><a href="pre_estoque.html" target="contentFrame">Pré Estoque</a></li>
+        <li><a href="quarentena.html" target="contentFrame">Quarentena</a></li>
+        <li><a href="custos_perdas.html" target="contentFrame">Custos e Perdas</a></li>
+        <li><a href="dashboards.html" target="contentFrame">Análises</a></li>
+        <li><a href="notificacoes.html" target="contentFrame">Notificações</a></li>
+      </ul>
+    </div>
+    <div class="content">
+      <iframe name="contentFrame" id="contentFrame" frameborder="0" style="width: 100%; height: calc(100vh - 20px);"></iframe>
+    </div>
+  </div>
+</body>
+</html>

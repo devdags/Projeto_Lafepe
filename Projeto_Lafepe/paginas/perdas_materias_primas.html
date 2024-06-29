@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perdas por Matérias Primas</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .content-container {
+      width: 100%;
+      max-width: 800px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      text-align: center;
+      margin-top: 6800px;
+
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+    .total {
+      font-weight: bold;
+      text-align: right;
+    }
+    .back-button, .dashboard-button {
+      display: block;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #007bff;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+    .back-button:hover, .dashboard-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="content-container">
+    <h2>Perdas por Matérias Primas</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Nome do Produto</th>
+          <th>ID</th>
+          <th>Quantidade Total em Estoque</th>
+          <th>Valor Total (R$)</th>
+        </tr>
+      </thead>
+      <tbody id="tabela-body">
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="5" class="total">Soma da Quantidade Total em Estoque</td>
+          <td id="total-quantidade" class="total"></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td colspan="5" class="total">Soma do Valor Total (R$)</td>
+          <td id="total-valor" class="total"></td>
+        </tr>
+      </tfoot>
+    </table>
+    <a href="custos_perdas.html" class="back-button">Voltar</a>
+    <a href="dashboard_materias_primas.html" class="dashboard-button">Gerar Dashboard</a>
+  </div>
+  <script src="../js/script.js"></script>
+</body>
+</html>

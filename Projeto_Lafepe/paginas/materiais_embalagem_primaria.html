@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materiais de Embalagem Primária</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      width: 100%;
+      max-width: 800px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-top: 350px;
+    }
+    .container h2 {
+      margin-bottom: 20px;
+      color: #333;
+      text-align: center;
+    }
+    .lista {
+      list-style-type: none;
+      padding: 0;
+    }
+    .lista li {
+      margin: 10px 0;
+      padding: 10px;
+      background: #e9ecef;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      cursor: pointer;
+    }
+    .lista li:hover {
+      background: #d8dee3;
+    }
+    .back-button {
+      display: block;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #ff0000;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      text-align: center;
+    }
+    .back-button:hover {
+      background-color: #cc0000;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Materiais de Embalagem Primária</h2>
+    <ul class="lista">
+      <li data-name="11816">11816</li>
+      <li data-name="11818">11818</li>
+      <li data-name="11842">11842</li>
+      <li data-name="11813">11813</li>
+      <li data-name="11843">11843</li>
+      <li data-name="11876">11876</li>
+      <li data-name="11877">11877</li>
+      <li data-name="11888">11888</li>
+      <li data-name="11886">11886</li>
+      <li data-name="11887">11887</li>
+      <li data-name="11885">11885</li>
+      <li data-name="11875">11875</li>
+      <li data-name="11819">11819</li>
+      <li data-name="11906">11906</li>
+      <li data-name="11904">11904</li>
+      <li data-name="11909">11909</li>
+      <li data-name="11958">11958</li>
+      <li data-name="11959">11959</li>
+    </ul>
+    <a href="estoque.html" class="back-button" target="contentFrame">Voltar</a>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const lista = document.querySelectorAll('.lista li');
+
+      lista.forEach(item => {
+        item.addEventListener('click', () => {
+          const itemName = item.getAttribute('data-name');
+          window.location.href = `materiais_embalagem_primaria_detalhes.html?name=${itemName}`;
+        });
+      });
+    });
+  </script>
+</body>
+</html>

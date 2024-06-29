@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboards</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      margin: 0;
+      padding: 20px;
+    }
+    .dashboard-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .stat-box {
+      padding: 20px;
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+    .stat-box i {
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <h2>Análises</h2>
+
+    <div class="stat-box">
+      <h3><i class="fas fa-flask icon"></i>Tempo Médio de Análise das Matérias-Primas</h3>
+      <p id="avg-analysis-time-mp">Carregando...</p>
+    </div>
+
+    <div class="stat-box">
+      <h3><i class="fas fa-box icon"></i>Tempo Médio de Análise do Material de Embalagem</h3>
+      <p id="avg-analysis-time-me">Carregando...</p>
+    </div>
+
+    <div class="stat-box">
+      <h3><i class="fas fa-clock icon"></i>Tempo Médio do Pedido até o Recebimento dos Insumos</h3>
+      <p id="avg-order-time">Carregando...</p>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      fetch('/dashboards_data')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('avg-analysis-time-mp').textContent = (data.avgAnalysisTimeMP !== 'N/A' ? data.avgAnalysisTimeMP + ' dias' : 'N/A');
+          document.getElementById('avg-analysis-time-me').textContent = (data.avgAnalysisTimeME !== 'N/A' ? data.avgAnalysisTimeME + ' dias' : 'N/A');
+          document.getElementById('avg-order-time').textContent = (data.avgOrderTime !== 'N/A' ? data.avgOrderTime + ' dias' : 'N/A');
+        })
+        .catch(error => {
+          console.error('Erro ao carregar dados dos dashboards:', error);
+        });
+    });
+  </script>
+</body>
+</html>

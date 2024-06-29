@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quarentena de Material de Embalagem</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+
+    td {
+      background-color: #f9f9f9;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input[type="date"], select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      text-align: center;
+      transition: background-color 0.3s;
+      cursor: pointer;
+    }
+
+    .btn-secondary {
+      background-color: #6c757d;
+    }
+
+    .btn:hover, .btn-secondary:hover {
+      background-color: #0056b3;
+    }
+
+    .edit-btn {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .edit-btn:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Quarentena de Material de Embalagem</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Produto ID</th>
+          <th>Nome</th>
+          <th>Data de Entrada</th>
+          <th>Data de Saída</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="quarentenaList">
+      </tbody>
+    </table>
+    <div class="form-group">
+      <label for="data_entrada">Data de Entrada</label>
+      <input type="date" id="data_entrada">
+    </div>
+    <div class="form-group">
+      <label for="data_saida">Data de Saída</label>
+      <input type="date" id="data_saida">
+    </div>
+    <div class="form-group">
+      <label for="status">Status</label>
+      <select id="status">
+        <option value="Pendente">Pendente</option>
+        <option value="Aprovado">Aprovado</option>
+        <option value="Rejeitado">Rejeitado</option>
+      </select>
+    </div>
+    <input type="hidden" id="produtoId"> 
+    <button class="btn" id="salvar">Salvar Alterações</button>
+    <a href="quarentena.html" class="btn btn-secondary">Voltar</a>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      function loadQuarentenaData() {
+        fetch('/quarentena_me')
+          .then(response => response.json())
+          .then(data => {
+            const quarentenaList = document.getElementById('quarentenaList');
+
+            quarentenaList.innerHTML = ''; 
+
+            data.forEach(item => {
+              const row = document.createElement('tr');
+              row.innerHTML = `
+                <td>${item.produto_id}</td>
+                <td>${item.nome}</td>
+                <td>${new Date(item.data_entrada).toLocaleDateString('pt-BR')}</td>
+                <td>${new Date(item.data_saida).toLocaleDateString('pt-BR')}</td>
+                <td>${item.status}</td>
+                <td><button class="edit-btn" data-id="${item.produto_id}">Editar</button></td>
+              `;
+              quarentenaList.appendChild(row);
+            });
+            const editButtons = document.querySelectorAll('.edit-btn');
+            editButtons.forEach(button => {
+              button.addEventListener('click', () => {
+                const produtoId = button.getAttribute('data-id');
+                fetch(`/quarentena_me/${produtoId}`)
+                  .then(response => response.json())
+                  .then(item => {
+                    document.getElementById('data_entrada').value = new Date(item.data_entrada).toISOString().split('T')[0];
+                    document.getElementById('data_saida').value = new Date(item.data_saida).toISOString().split('T')[0];
+                    document.getElementById('status').value = item.status;
+                    document.getElementById('produtoId').value = produtoId; 
+                  });
+              });
+            });
+          })
+          .catch(error => {
+            console.error('Erro ao carregar dados da quarentena:', error);
+          });
+      }
+      loadQuarentenaData();
+      document.getElementById('salvar').addEventListener('click', () => {
+        const data_entrada = document.getElementById('data_entrada').value;
+        const data_saida = document.getElementById('data_saida').value;
+        const status = document.getElementById('status').value;
+        const produtoId = document.getElementById('produtoId').value;
+        fetch(`/quarentena_me/${produtoId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ data_entrada, data_saida, status }),
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Dados atualizados com sucesso:', data);
+          loadQuarentenaData();
+        })
+        .catch(error => {
+          console.error('Erro ao atualizar dados:', error);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
